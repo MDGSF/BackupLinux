@@ -48,6 +48,25 @@ Backup_vim() {
   cp -arf $HOME/.vimrc $VIM_BACKUP/vimrc_backup
   cp -arf $HOME/.vim $VIM_BACKUP/vim_backup
 }
+Restore_vim() {
+  VIM_BACKUP=$HOME_BACKUP
+  cp -arf $VIM_BACKUP/vimrc_backup $HOME/.vimrc
+  cp -arf $VIM_BACKUP/vim_backup $HOME/.vim
+}
+
+Backup_profile() {
+  cp -arf $HOME/.profile $HOME_BACKUP/profile_backup
+}
+Restore_profile() {
+  cp -arf $HOME_BACKUP/profile_backup $HOME/.profile
+}
+
+Backup_go() {
+  echo ""
+}
+Restore_go() {
+  echo ""
+}
 
 api_baisc() {
   if [ ! -d "$HOME_BACKUP" ];then
@@ -59,6 +78,7 @@ api_baisc() {
   Backup_note
   Backup_ssh
   Backup_tmux
+  Backup_profile
   Backup_vim
 
   tar -zcvf home_backup`date +"%Y%m%d%H%M%S"`.tar.gz $HOME_BACKUP
