@@ -1,6 +1,8 @@
 #!/bin/bash
 
-HOME_BACKUP=$HOME/home_backup
+HOME_BACKUP_NAME=home_backup
+HOME_BACKUP=$HOME/$HOME_BACKUP_NAME
+LOCAL_DIR=$HOME/local
 
 Backup_c1() {
   if [ ! -d "$HOME_BACKUP/c1" ];then
@@ -62,10 +64,32 @@ Restore_profile() {
 }
 
 Backup_go() {
-  echo ""
+  if [ ! -d "$HOME_BACKUP/go" ];then
+    mkdir -p $HOME_BACKUP/go
+  fi
+
+  cp -arf $GOROOT/* $HOME_BACKUP/go
 }
 Restore_go() {
-  echo ""
+  if [ ! -d "$LOCAL_DIR" ];then
+    mkdir -p $LOCAL_DIR
+  fi
+
+  cp -arf $HOME_BACKUP/go $LOCAL_DIR
+}
+
+Backup_cow() {
+  cp -arf $HOME/.cow $HOME_BACKUP/cow_backup
+}
+Restore_cow() {
+  cp -arf $HOME_BACKUP/cow_backup $HOME/.cow
+}
+
+Backup_git() {
+  cp -arf $HOME/.gitconfig $HOME_BACKUP/gitconfig_backup
+}
+Restore_git() {
+  cp -arf $HOME_BACKUP/gitconfig_backup $HOME/.gitconfig
 }
 
 api_baisc() {
@@ -80,26 +104,37 @@ api_baisc() {
   Backup_tmux
   Backup_profile
   Backup_vim
+  Backup_cow
+  Backup_git
 
-  tar -zcvf home_backup`date +"%Y%m%d%H%M%S"`.tar.gz $HOME_BACKUP
+  tar -zcvf $HOME_BACKUP_NAME`date +"%Y%m%d%H%M%S"`.tar.gz -C $HOME $HOME_BACKUP_NAME
   rm -rf $HOME_BACKUP
 }
 
 api_Backup_development_environment() {
-  echo ""
+  if [ ! -d "$HOME_BACKUP" ];then
+    echo "$HOME_BACKUP 文件夹不存在，创建文件夹"
+    mkdir -p $HOME_BACKUP
+  fi
+
+  Backup_tmux
+  Backup_vim
+  Backup_git
+  Backup_go 
+
+  tar -zcvf $HOME_BACKUP_NAME`date +"%Y%m%d%H%M%S"`.tar.gz -C $HOME $HOME_BACKUP_NAME
+  rm -rf $HOME_BACKUP
 }
 
 case "$1" in
-  'basic')
+  'backup_basic')
     api_baisc
     ;;
-  'vim')
-    ;;
-  'dev')
+  'backup_dev')
     api_Backup_development_environment
     ;;
   *)
-    echo "usage: $0 {basic|vim|restore}"
+    echo "usage: $0 {backup_basic|backup_dev}"
     exit 1
     ;;
 esac
