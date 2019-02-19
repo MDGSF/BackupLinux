@@ -1,4 +1,9 @@
 #!/bin/bash
+# A simple back up script.
+<<COMMENT
+Author: Huang Jian
+FileName: backup.sh
+COMMENT
 
 HOME_BACKUP_NAME=home_backup
 HOME_BACKUP=$HOME/$HOME_BACKUP_NAME
