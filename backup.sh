@@ -92,6 +92,10 @@ Restore_git() {
   cp -arf $HOME_BACKUP/gitconfig_backup $HOME/.gitconfig
 }
 
+Backup_zsh() {
+  cp -arf $HOME/.zshrc $HOME_BACKUP/zshrc_backup
+}
+
 api_baisc() {
   if [ ! -d "$HOME_BACKUP" ];then
     echo "$HOME_BACKUP 文件夹不存在，创建文件夹"
@@ -106,6 +110,7 @@ api_baisc() {
   Backup_vim
   Backup_cow
   Backup_git
+  Backup_zsh
 
   tar -zcvf $HOME_BACKUP_NAME`date +"%Y%m%d%H%M%S"`.tar.gz -C $HOME $HOME_BACKUP_NAME
   rm -rf $HOME_BACKUP
@@ -127,6 +132,9 @@ api_Backup_development_environment() {
 }
 
 case "$1" in
+  'backup_vim')
+    Backup_vim
+    ;;
   'backup_basic')
     api_baisc
     ;;
@@ -134,7 +142,7 @@ case "$1" in
     api_Backup_development_environment
     ;;
   *)
-    echo "usage: $0 {backup_basic|backup_dev}"
+    echo "usage: $0 {backup_vim|backup_basic|backup_dev}"
     exit 1
     ;;
 esac
