@@ -101,6 +101,15 @@ Backup_zsh() {
   cp -arf $HOME/.zshrc $HOME_BACKUP/zshrc_backup
 }
 
+Backup_vscode() {
+  if [ ! -d "$HOME_BACKUP/vscode" ];then
+    mkdir -p $HOME_BACKUP/vscode
+  fi
+
+  cp -arf $HOME/.config/Code/User/keybindings.json $HOME_BACKUP/vscode/keybindings.json
+  cp -arf $HOME/.config/Code/User/settings.json $HOME_BACKUP/vscode/settings.json
+}
+
 api_baisc() {
   if [ ! -d "$HOME_BACKUP" ];then
     echo "$HOME_BACKUP 文件夹不存在，创建文件夹"
@@ -116,6 +125,7 @@ api_baisc() {
   Backup_cow
   Backup_git
   Backup_zsh
+  Backup_vscode
 
   tar -zcvf $HOME_BACKUP_NAME`date +"%Y%m%d%H%M%S"`.tar.gz -C $HOME $HOME_BACKUP_NAME
   rm -rf $HOME_BACKUP
@@ -147,7 +157,7 @@ case "$1" in
     api_Backup_development_environment
     ;;
   *)
-    echo "usage: $0 {backup_vim|backup_basic|backup_dev}"
+    echo "usage: $0 {backup_vim|backup_basic|backup_dev|restore}"
     exit 1
     ;;
 esac
